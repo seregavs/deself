@@ -1,0 +1,21 @@
+\\wsl$ в Windows Explorer покажет каталоги Windows Subsystem Linux
+C:\Users\sshab\AppData\Local\Docker\wsl\data - здесь живет виртуальный диск (vhdx ( virtual machine disk)) для Докера
+docker info - покаызывает параметры докера
+you can terminate docker process and open ext4.vhdx file ( with 7zip for example), and there you can see version-pack-data\community\docker 
+
+cr.yandex/crp1r8pht0n0gl25aug1/project-sprint-3:latest - image with working airflow 
+its dags are in /lessons/dags
+команда SET в терминале запущенного контейнера показывает системные переменные, в т.ч. AIRFLOW_HOME=/opt/airflow
+/opt/airflow/airflow.cfg - файл настроек. Содержит все, в т.ч. пути к файлам dags
+
+Настройка среды:
+0) инсталлировать Visual Studio Code, Python, GitHub Desktop, Windows Linux Subsystem, Docker Desktop
+1) Создать пустой (но с readme) репозиторий в github.com
+2) Клонировать репозиторий локально в GitHub Desktop (File -> Clone Repository..)
+3) Создать папку dag в папке локального клона репозитория
+4) Настроить Visual Studio Code (VSC) на папку локального клона репозитория (File -> Open Folder..)
+5) В Visual Studio Code инсталлировать недостающие библиотеки для Airflow (необяз, т.к. не придется запускать локально)
+
+
+
+
