@@ -29,4 +29,4 @@ with DAG( dag_id="basic_dag0001" \
     begin = DummyOperator(task_id="begin")
     end = DummyOperator(task_id="end")
  
-    begin >>  end
+    begin >> end
