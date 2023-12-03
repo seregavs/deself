@@ -15,7 +15,40 @@ its dags are in /lessons/dags
 3) Создать папку dag в папке локального клона репозитория
 4) Настроить Visual Studio Code (VSC) на папку локального клона репозитория (File -> Open Folder..)
 5) В Visual Studio Code инсталлировать недостающие библиотеки для Airflow (необяз, т.к. не придется запускать локально)
+6) Когда dag.py написан, переместить его мышкой в папку с dags запущенного контейнера с airflow
 
+Команда в контекстном меню контейнера open with browser открывает VSC напрямую в контейнере!! Открывает в браузере
+Надо замэппить папку с дагами (из git) на контейнер.
 
+Airflow supports subfolders in the dag's folder!!!
+Dags should have unique dag_ids. if there are 2 dags in different folders with same id, only dag from upmost folder becomes visible. 
+Provide prefix to dag's id. 
+Use tags to distinguish, filter and sort dags in the dashboard.
 
+In the terminal you can call airflow cli commands. E.g. airflow config get-value core executor
 
+Airflow version is in the bottom of the dashboard. 2.3.0 - my version.
+
+// **************************
+TIME AND TIMEZONES in Airflow
+
+https://crontab.guru/examples.html
+*/10 * * * *        every 10 minutes
+0 0 * * 6,0         At 00:00 on Saturday and Sunday.
+0 0 * * 1-5         At 00:00 on every day-of-week from Monday through Friday.
+0 1 * * *           At 01:00.
+
+Airflow dags start day https://infinitelambda.com/airflow-start-date-execution-date/ 
+The reason being, as stated above, that Airflow executes the DAG after start_date + interval (daily)
+After changing it is required (?) to run (press Run buton in the dashboard)
+
+https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/timezone.html
+
+// **************************
+
+Порты в докере PortBindings 5432/15432. Первое значение - порт внутри докера. 2-е - порт извне докера. Так настраивается подключение к внутренней Postgre
+docker run -d -p 3000:3000 -p 15432:5432 --name=de-project-sprint-3-server cr.yandex/crp1r8pht0n0gl25aug1/project-sprint-3:latest
+-v s0-lessons:/s0-lessons
+
+http://localhost:3000/airflow/home
+AirflowAdmin  / airflow_pass
