@@ -49,9 +49,20 @@ https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/t
 Порты в докере PortBindings 5432/15432. Первое значение - порт внутри докера. 2-е - порт извне докера. Так настраивается подключение к внутренней Postgre
 docker run -d -p 3000:3000 -p 15432:5432 --name=deself2 --volume=C:\Users\sshab\Documents\GitHub\deself\data:/deself_data cr.yandex/crp1r8pht0n0gl25aug1/project-sprint-3:latest 
 
-
 http://localhost:3000/airflow/home
 AirflowAdmin  / airflow_pass
 
 docker run --hostname=dbd848472722 --user=root --env=PATH=/usr/local/nvm/v14.18.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=INTERPRETER_NAME=python3 --env=SCRIPT_NAME=__test.py --env=TEMPLATE_FILENAME=template.py --env=NVM_DIR=/usr/local/nvm --env=NODE_VERSION=14.18.1 --env=NODE_PATH=/usr/local/nvm/v14.18.1/lib/node_modules --env=PG_VERSION=13 --env=VSC_VERSION=4.0.1 --env=MB_JETTY_PORT=8998 --env=MB_DB_TYPE=postgres --env=MB_DB_DBNAME=metabase --env=MB_DB_PORT=5432 --env=MB_DB_USER=jovyan --env=MB_DB_PASS=jovyan --env=MB_DB_HOST=localhost --env=CB_SERVER_NAME=CloudBeaver Practicum Server --env=CB_SERVER_URL=http://localhost:3000/ --env=CB_ADMIN_NAME=admin --env=CB_ADMIN_PASSWORD=jovyan --env=LC_ALL=ru_RU.UTF-8 --env=AIRFLOW__CORE__LOAD_EXAMPLES=False --env=AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False --env=AIRFLOW_HOME=/opt/airflow --env=PYTHONPATH=:/lessons/dags 
 --volume=C:\Users\sshab\Documents\GitHub\deself\data:/deself_data --volume=/lessons --workdir=/agent -p 3000:3000 --runtime=runc -d cr.yandex/crp1r8pht0n0gl25aug1/sprint-3:latest
+
+// **************************
+311ae24539bf09995a843c4f6b7ef6a9df2ad38809cf7141621e1b8f4f993178
+
+docker run --hostname=311ae24539bf --user=root --mac-address=02:42:ac:11:00:02 --volume=C:\Users\sshab\Documents\GitHub\deself\data:/deself_data --volume=/project --workdir=/agent -p 3000:3000 -p 15432:5432 --restart=no --runtime=runc -d cr.yandex/crp1r8pht0n0gl25aug1/project-sprint-3:latest
+
+docker run --hostname=311ae24539bf --user=root --mac-address=02:42:ac:11:00:02 --env=PATH=/usr/local/nvm/v14.18.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=INTERPRETER_NAME=python3 --env=SCRIPT_NAME=__test.py --env=TEMPLATE_FILENAME=template.py --env=LC_ALL=ru_RU.UTF-8 --env=AIRFLOW__CORE__LOAD_EXAMPLES=False --env=AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False --env=AIRFLOW_HOME=/opt/airflow  --volume=C:\Users\sshab\Documents\GitHub\deself\data:/deself_data --volume=/project --workdir=/agent -p 3000:3000 -p 15432:5432 --restart=no --runtime=runc -d cr.yandex/crp1r8pht0n0gl25aug1/project-sprint-3:latest
+
+// **************************
+
+Ginga reference
+https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html
