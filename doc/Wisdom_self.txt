@@ -66,3 +66,6 @@ docker run --hostname=311ae24539bf --user=root --mac-address=02:42:ac:11:00:02 -
 
 Ginga reference
 https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html
+
+// **************************
+Логи в папке /lessons/logs, сгруппированы по dag, запуску dag, по task и по попытке task-а
