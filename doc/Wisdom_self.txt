@@ -33,6 +33,7 @@ Airflow version is in the bottom of the dashboard. 2.3.0 - my version.
 TIME AND TIMEZONES in Airflow
 
 https://crontab.guru/examples.html
+CRON maximum resolution is 1 minute
 */10 * * * *        every 10 minutes
 0 0 * * 6,0         At 00:00 on Saturday and Sunday.
 0 0 * * 1-5         At 00:00 on every day-of-week from Monday through Friday.
@@ -64,8 +65,23 @@ docker run --hostname=311ae24539bf --user=root --mac-address=02:42:ac:11:00:02 -
 
 // **************************
 
-Ginga reference
+Jinja reference
 https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html
 
 // **************************
 Логи в папке /lessons/logs, сгруппированы по dag, запуску dag, по task и по попытке task-а
+
+Bash operator examples
+https://airflow.apache.org/docs/apache-airflow/stable/_modules/airflow/example_dags/example_sensors.html
+https://docs.astronomer.io/learn/what-is-a-sensor
+
+====================
+from textwrap import fill
+print(fill('qwerty asfgh zxcvhb', width=15))
+
+qwerty asfgh
+zxcvhb
+
+==================
+Если max_active_runs=1 и установлено ежеминутное запускание и в даге есть сенсор-ожидание, то накопленные за время ожидания процессы не стартуют, пока 
+ждущий процесс не выполнится, но как только он выполнится, те, что ожидали, начнут стартовать каждую секунду, если условие выполняется
