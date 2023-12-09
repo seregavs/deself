@@ -1,13 +1,11 @@
 import os
 import pandas as pd
-import re
 
 def SaveFile(fname):
     # print(f'filename = { fname}')
     lst = []
     lstd = []
     try:
-        # MATERIAL	PLANT	CALMONTH	AMOUNT	CURRENCY COMMENT
         col_names=['MATERIAL', 'PLANT', 'CALMONTH', 'AMOUNT','CURRENCY','COMMENT','SALEDATE']
         data = pd.read_excel(fname, sheet_name='продажи01', header = 0 \
                              , usecols='A:G', engine='openpyxl', dtype=str \
@@ -19,7 +17,8 @@ def SaveFile(fname):
             + data['SALEDATE'].replace(to_replace=[r"(\d{1,2})/(\d{1,2})/(\d{4})"], value=["\\2"], regex=True).str.zfill(2) \
             + data['SALEDATE'].replace(to_replace=[r"(\d{1,2})/(\d{1,2})/(\d{4})"], value=["\\1"], regex=True).str.zfill(2) 
         # Если разделитель - часть строки то строка окаймляеся в кавычки!
-        d  = data.to_csv('C:\\Users\\sshab\\Documents\\GitHub\\deself\\data\\dd.csv',  encoding='utf-8', index=False)
+        # d  = data.to_csv('C:\\Users\\sshab\\Documents\\GitHub\\deself\\data\\dd.csv',  encoding='utf-8', index=False)
+        d  = data.to_csv('dd.csv',  encoding='utf-8', index=False)
         # print(data.columns)
         # data['DATUM'] = data['DATUM'].astype(str).apply(lambda x: x.replace('-', ''))
         # Assuming data types for `a` and `b` columns to be altered
@@ -46,15 +45,23 @@ def SaveFile(fname):
     except Exception as e: 
         print(str(e)) 
 
-c_data_dir = os.environ.get('DAG_DATA_ROOT') if os.environ.get('DAG_DATA_ROOT') != None else 'C:\\Users\\sshab\\Documents\\GitHub\\deself\\data'
+# 'C:\\Users\\sshab\\Documents\\GitHub\\deself\\data'
     # else 'data'  C:\Users\sshab\Documents\GitHub\deself\data \
 
-c_fullpath = f'{c_data_dir}\\task01'
+# for Windows machine
+# c_data_dir = os.environ.get('DAG_DATA_ROOT') if os.environ.get('DAG_DATA_ROOT') != None else 'C:\\Users\\sshab\\Documents\\GitHub\\deself\\data'
+# c_fullpath = f'{c_data_dir}\\task01'
+
+# for docker image
+c_data_dir = os.environ.get('DAG_DATA_ROOT') if os.environ.get('DAG_DATA_ROOT') != None else 'deself_data'
+c_fullpath = f'/{c_data_dir}/task01'
 
 lst_files = []
 lst_files = os.listdir(c_fullpath)
+print(f'current working dir = { os.getcwd() }') # /lessons
 
 if len(lst_files) > 0:
-    c_filepath = f'{c_fullpath}\\{lst_files[0]}'
+    # c_filepath = f'{c_fullpath}\\{lst_files[0]}' # Windows
+    c_filepath = f'{c_fullpath}/{lst_files[0]}' # docker
     SaveFile(c_filepath)
     
