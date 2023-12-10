@@ -17,7 +17,8 @@ class XLSX_CSV_base:
     def get_req_tsn(self) -> str:
         is_dst = time.daylight and time.localtime().tm_isdst > 0
         utc_offset = - (time.altzone if is_dst else time.timezone)/3600
-        # I'm aware about timezones with fraction of hour offset. But it is not relevent for the case
+        # I'm aware about timezones with fraction of hour offset.
+        # But it is not relevent for the case
         return datetime.now().strftime("%Y%m%d%H%M%S") + 'UTC'+str(int(utc_offset))
 
     def move_column_inplace(self, df, col, pos: int):

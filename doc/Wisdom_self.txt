@@ -88,3 +88,8 @@ zxcvhb
 ==================
 install specific version of package
 pip install openpyxl==3.0.3
+
+=============
+Документация для классоа и методов
+https://peps.python.org/pep-0257/
+https://peps.python.org/pep-0258
