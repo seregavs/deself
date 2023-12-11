@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import logging
 import platform
-
+from airflow import AirflowException
 
 class XLSX_CSV_Data001(XLSX_CSV_Base):
 
@@ -47,7 +47,7 @@ class XLSX_CSV_Data001(XLSX_CSV_Base):
         try:
             # d  = self.data.to_csv('C:\\Users\\sshab\\Documents\\GitHub\\deself\\data\\dd.csv' \
             d  = self.data.to_csv(self.get_csv_filename(fname) \
-                            ,  encoding='utf-8', index=False, header=True)
+                            , encoding='utf-8', index=False, header=True)
             logging.info(f'EXTRACT,I,004,Saving csv from {fname} was OK')   
             return 0
         except Exception as e: 
@@ -60,7 +60,8 @@ class XLSX_CSV_Data001(XLSX_CSV_Base):
             # pd.read_excel('file_name.xlsx', dtype={'a': np.float64, 'b': np.int32})
 
 
-def helper_extract_file():
+def helper_xlsx001():
+    """ method to be called during tests """
     if platform.system() == 'Windows':
         c_data_dir = os.environ.get('DAG_DATA_ROOT') \
             if os.environ.get('DAG_DATA_ROOT') != None \
@@ -72,8 +73,26 @@ def helper_extract_file():
         c_fullpath = f'/{c_data_dir}/task01'
     
     with XLSX_CSV_Data001(c_fullpath) as o:
-        res = o.extract_file_from_dir()
-    print(f'result = { res }')
+        res = o.extract_files_from_dir()
+        k = o.error_cnt
+    print(f'result = { res } ec = { k }')
+
+def op_xlsx001(ti):
+    """ Operator for a dag: extract xlsx, transform and save csv """
+    c_data_dir = os.environ.get('DAG_DATA_ROOT') \
+        if os.environ.get('DAG_DATA_ROOT') != None else 'deself_data'
+    c_fullpath = f'/{c_data_dir}/task01'
+    with XLSX_CSV_Data001(c_fullpath, 1) as o:
+        res = o.extract_files_from_dir()
+        error_cnt = o.error_cnt
+        ti.xcom_push(key='error_cnt', value=error_cnt)
+        # pass directory with both csv and xlsx files, 
+        # which will be deleted after successful copying to database
+        ti.xcom_push(key='dir', value=c_data_dir)
+    if error_cnt > 0:
+        # If you are looking for retries use AirflowException
+        raise AirflowException(f'Error processing xlsx-fils. Count = { error_cnt }')
+    return res
 
 if __name__ == "__main__":
-    helper_extract_file()
+    helper_xlsx001()

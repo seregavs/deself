@@ -7,12 +7,22 @@ import time
 
 class XLSX_CSV_Base:
 
-    def __init__(self, c_fullpath: str):
+    def __init__(self, c_fullpath: str, fcount: int = 1):
         """ 
          c_fullpath - directory with source xlsx-files
+         fcount - number of xlsx-files to be processed
         """
         self.c_fullpath = c_fullpath
         self.data = pd.DataFrame()
+        self.fname_xlsx = ""
+        self.fcount = fcount
+        self.lst_files_sel =[]
+
+    @property
+    def fname_csv(self): return self.get_csv_filename(self.fname_xlsx)
+
+    @property
+    def error_cnt(self): return sum(1 for x in self.lst_files_sel if x.get("res") > 0 )
 
     def __enter__(self):
         return self
@@ -32,21 +42,23 @@ class XLSX_CSV_Base:
         col = df.pop(col)
         df.insert(pos, col.name, col)
 
-# will be overrided in sub-classes
-    def etl(self, fname: str) -> int:
-        res = self.read_excel(fname)
+    def etl(self) -> int:
+        res = self.read_excel(self.fname_xlsx)
         if res == 0: 
-           res = self.transform_data(fname)
+           res = self.transform_data(self.fname_xlsx)
            if res == 0:
-              res = self.save_csv(fname)
+              res = self.save_csv(self.fname_xlsx)
         return res
 
+# will be overrided in sub-classes
     def read_excel(self, fname: str) -> int:
         return 0
 
+# will be overrided in sub-classes
     def transform_data(self, fname: str) -> int:
         return 0
 
+# will be overrided in sub-classes
     def save_csv(self, fname: str) -> int:
         return 0
 
@@ -54,17 +66,23 @@ class XLSX_CSV_Base:
         """ cut xlsx extention adn add csv"""
         return fname[:-4] + 'csv'
 
-    def extract_file_from_dir(self) -> int:
+    def extract_files_from_dir(self) -> []:
         lst_files = [ fi for fi in os.listdir(self.c_fullpath) if fi[-4:] == 'xlsx']
         # print(f'current working dir = { os.getcwd() }') # /lessons
 
-        if len(lst_files) > 0:
-            if platform.system() == 'Windows':
-                fname_src = f'{self.c_fullpath}\\{lst_files[0]}' # Windows
-            else:
-                fname_src = f'{self.c_fullpath}/{lst_files[0]}' # docker
-            res = self.etl(fname_src)           
+        self.lst_files_sel = []
+        for i, element in enumerate(lst_files):
+            if i < self.fcount:
+                self.lst_files_sel.append(dict(fname=element, res = '' )) 
+        if len(self.lst_files_sel) > 0:
+            for li in self.lst_files_sel:            
+                if platform.system() == 'Windows':
+                    self.fname_xlsx  = f'{self.c_fullpath}\\{li.get("fname")}' # Windows
+                else:
+                    self.fname_xlsx  = f'{self.c_fullpath}/{li.get("fname")}' # docker
+                res = self.etl() 
+                li.update({"res": res })
+            return self.lst_files_sel  
         else:
             logging.info(f'EXTRACT,E,001,{self.c_fullpath} has no xlsx files')
-            res = 1
-        return res
+            return [ dict(fname="", res=1) ]

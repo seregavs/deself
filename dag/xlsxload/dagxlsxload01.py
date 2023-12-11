@@ -1,9 +1,12 @@
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
 import pendulum
 import sys
 sys.path.append("/lessons/include")
+# from ...include.etlxlsx001 import op_xlsx001
+from etlxlsx001 import op_xlsx001
 
 default_args_i028159 = {
     'owner': 'i028159',
@@ -21,7 +24,7 @@ default_args_i028159 = {
 # Airflow executes the DAG after start_date + interval (daily)
 
 with DAG( dag_id="xlsxload_dag01" \
-         , start_date=pendulum.datetime(2023, 12, 2, tz="Europe/Moscow") \
+         , start_date=pendulum.datetime(2023, 12, 10, tz="Europe/Moscow") \
          , schedule_interval="*/40 19 * * *" \
          , default_args=default_args_i028159 \
          , tags=["train", "basic"] \
@@ -31,4 +34,9 @@ with DAG( dag_id="xlsxload_dag01" \
     begin = DummyOperator(task_id="begin")
     end = DummyOperator(task_id="end")
  
-    begin >> end
+    xlsx001 = PythonOperator(
+        task_id='xlsx001',
+        python_callable=op_xlsx001
+    )
+
+    begin >> xlsx001 >> end
